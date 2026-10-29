@@ -1,9 +1,7 @@
-/* Pizza Asrifriska — pilihan pizza, ukuran, topping, keranjang, checkout WhatsApp */
-const ADMIN_WHATSAPP = '6285362464950'; // Pastikan nomor benar sebelum dipublikasikan.
+const ADMIN_WHATSAPP = '6285362464950'; 
 const LETTERING_FEE = 10000;
 const PLUS_ICON = '<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 
-// Urutan topping harus sama dengan urutan harga pada setiap varian.
 const TOPPINGS = [
   { id: 'standar', name: 'Standar' },
   { id: 'extra-topping', name: 'Extra Topping' },
@@ -13,7 +11,6 @@ const TOPPINGS = [
   { id: 'mentai', name: 'Mentai' }
 ];
 
-// Harga ditulis dalam ribuan: Standar, Extra Topping, Pepperoni, Extra Cheese, Carbonara, Mentai.
 const variant = (id, name, ...prices) => ({ id, name, prices: prices.map(price => price * 1000) });
 const products = [
   {
