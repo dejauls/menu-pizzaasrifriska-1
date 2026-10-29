@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#047857">
+  <meta name="description" content="Pesan Pizza Asrifriska dengan mudah. Pilih jenis pizza, ukuran, topping, lalu kirim pesanan melalui WhatsApp.">
+  <title>Pizza Asrifriska — Pesan Online</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { pizza: { green: '#047857', dark: '#064e3b', cream: '#fffaf0', line: '#e7e5e4' } },
+        boxShadow: { soft: '0 12px 35px rgba(15, 23, 42, .08)' }
+      }}
+    };
+  </script>
+  <style>
+    [hidden] { display: none !important; }
+    body { -webkit-tap-highlight-color: transparent; }
+    .modal-scroll { max-height: min(88vh, 850px); overflow-y: auto; }
+  </style>
+</head>    
+<body class="min-h-screen bg-stone-50 text-stone-900 antialiased">
+  <header class="sticky top-0 z-30 border-b border-stone-200/80 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+      <a href="#menu" class="flex items-center gap-3" aria-label="Pizza Asrifriska, ke menu">
+        <img src="assets/logo.jpg" alt="Logo Pizza Asrifriska" class="h-11 w-11 rounded-2xl object-cover shadow-sm">
+        <span><b class="block text-base font-extrabold tracking-tight sm:text-lg">Pizza Asrifriska</b><small class="block text-xs text-stone-500">Menu & pemesanan</small></span>
+      </a>
+      <a href="#cara-pesan" class="rounded-full border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-50">Cara pesan</a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 pb-32 sm:px-6">
+    <section class="relative mt-5 overflow-hidden rounded-3xl bg-emerald-900 px-5 py-7 text-white shadow-soft sm:mt-8 sm:px-9 sm:py-10">
+      <div class="relative z-10 max-w-xl">
+        <span class="inline-flex rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[.18em] text-emerald-100">Freshly made · Homemade pizza</span>
+        <h1 class="mt-4 text-3xl font-black leading-tight sm:text-5xl">Lagi pingin Pizza ? </h1>
+        <p class="mt-3 max-w-lg text-sm leading-6 text-emerald-50 sm:text-base">Pilih jenis pizza, tentukan ukuran dan topping favoritmu</p>
+      </div>
+      <img src="assets/pizza.png" alt="Pizza Asrifriska" aria-hidden="true" class="pointer-events-none absolute -right-5 top-20 w-[180px] select-none object-contain opacity-50 sm:right-5 sm:w-[230px]">
+    </section>
+
+    <section id="menu" class="pt-8 sm:pt-10">
+      <div class="flex items-end justify-between gap-3">
+        <div><p class="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Menu kami</p><h2 class="mt-1 text-2xl font-extrabold sm:text-3xl">Pilih jenis pizza</h2></div>
+        <span id="product-count" class="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-stone-600 shadow-sm">2 menu</span>
+      </div>
+      <div class="mt-5 flex gap-2 overflow-x-auto pb-1" aria-label="Filter menu">
+        <button type="button" class="rounded-full bg-emerald-700 px-4 py-2 text-sm font-bold text-white" data-filter="all">Semua</button>
+        <button type="button" class="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-700" data-filter="gulung">Pizza Gulung</button>
+        <button type="button" class="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-700" data-filter="bulat">Pizza Bulat</button>
+      </div>
+      <div id="product-list" class="mt-4 flex flex-col gap-6" aria-live="polite"></div>
+    </section>
+
+    <section id="cara-pesan" class="mt-8 rounded-2xl border border-emerald-100 bg-gray-300 p-5 sm:mt-10 sm:p-6">
+      <h2 class="font-extrabold text-emerald-950 text-center">Pesan gampang, tinggal pilih!</h2>
+      <p class="mt-2 text-sm leading-6 text-emerald-900">1. Pilih pizza </p>
+      <p class="mt-2 text-sm leading-6 text-emerald-900">2. Tentukan ukuran dan topping </p>
+      <p class="mt-2 text-sm leading-6 text-emerald-900">3. Periksa keranjang </p>
+      <p class="mt-2 text-sm leading-6 text-emerald-900">4. Konfirmasi pesanan </p>
+      <p class="mt-2 text-sm leading-6 text-emerald-900">5. Isi detail dan kirim</p>
+    </section>
+  </main>
+
+  <div id="cart-dock" hidden class="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200 bg-white/95 p-3 shadow-[0_-10px_35px_rgba(15,23,42,.10)] backdrop-blur sm:px-6">
+    <div class="mx-auto max-w-5xl">
+      <button id="open-cart" type="button" class="flex w-full items-center justify-between gap-3 rounded-full bg-emerald-600 px-5 py-3.5 text-left text-white shadow-lg transition hover:bg-emerald-700 sm:px-7">
+        <span class="flex min-w-0 items-center gap-3"><span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-xl">🛒</span><span class="min-w-0"><small id="dock-count" class="block text-xs text-emerald-50">Keranjang · 0 item</small><b id="dock-total" class="block truncate text-lg">Rp0</b></span></span>
+        <span class="shrink-0 text-sm font-bold">Lihat keranjang ›</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="variant-overlay" data-overlay hidden class="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 backdrop-blur-[2px] sm:items-center sm:p-4">
+    <section role="dialog" aria-modal="true" aria-labelledby="variant-title" class="modal-scroll relative w-full max-w-xl rounded-t-3xl bg-white p-5 pb-0 shadow-2xl sm:rounded-3xl sm:p-7 sm:pb-0">
+      <button type="button" data-close="variant-overlay" aria-label="Tutup" class="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-stone-100 text-2xl text-stone-600 hover:bg-stone-200">×</button>
+
+      <div class="flex items-center gap-4 pr-10">
+        <img id="variant-image" src="" alt="" class="h-20 w-20 rounded-2xl bg-stone-100 object-cover">
+        <div class="min-w-0">
+          <span id="variant-category" class="text-[10px] font-bold uppercase tracking-[.15em] text-emerald-700"></span>
+          <h2 id="variant-title" class="mt-1 text-xl font-extrabold">Pilih pizza</h2>
+          <p id="variant-description" class="mt-1 text-sm text-stone-500"></p>
+        </div>
+      </div>
+
+      <form id="variant-form" class="mt-6">
+        <h3 class="mt-6 border-t border-stone-100 pt-5 text-2xl font-extrabold tracking-tight text-stone-800">Pilih topping</h3>
+        <div id="topping-options" class="mt-2 flex flex-col gap-3"></div>
+
+        <label id="lettering-option" class="relative mt-2 flex cursor-pointer items-start gap-4 border-t border-stone-100 py-4">
+          <input id="lettering" type="checkbox" class="peer sr-only">
+          <span class="min-w-0 flex-1 pr-14">
+            <b class="block text-lg font-normal text-stone-800">Tambahkan cetak huruf</b>
+            <small class="mt-1 block text-sm text-stone-500">Biaya tambahan Rp10.000 per pesanan produk</small>
+          </span>
+          <span class="absolute bottom-4 right-0 grid h-10 w-10 place-items-center rounded-full bg-emerald-700 text-2xl text-white shadow peer-checked:hidden">+</span>
+          <span class="absolute bottom-4 right-0 hidden h-10 w-10 place-items-center rounded-full border-2 border-emerald-700 bg-white text-lg font-bold text-emerald-700 peer-checked:grid">✓</span>
+        </label>
+
+        <div class="sticky bottom-0 -mx-5 mt-2 border-t border-stone-100 bg-white px-5 pb-4 pt-3 sm:-mx-7 sm:px-7">
+          <div class="mb-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <button id="variant-minus" type="button" class="grid h-9 w-9 place-items-center rounded-full border border-stone-300 bg-white text-xl font-semibold">−</button>
+              <output id="variant-qty" class="min-w-4 text-center text-lg font-bold">1</output>
+              <button id="variant-plus" type="button" class="grid h-9 w-9 place-items-center rounded-full bg-emerald-700 text-xl font-semibold text-white">+</button>
+            </div>
+            <div class="text-right">
+              <span class="block text-xs text-stone-500">Subtotal</span>
+              <b id="variant-subtotal" class="text-xl font-extrabold text-emerald-800">Rp0</b>
+            </div>
+          </div>
+          <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-4 text-lg font-bold text-white shadow-lg transition hover:bg-emerald-700">
+            Tambah ke keranjang
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="cart-overlay" data-overlay hidden class="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 backdrop-blur-[2px] sm:items-center sm:p-4">
+    <section role="dialog" aria-modal="true" aria-labelledby="cart-title" class="modal-scroll relative w-full max-w-xl rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl sm:p-7">
+      <button type="button" data-close="cart-overlay" aria-label="Tutup" class="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-stone-100 text-2xl text-stone-600">×</button>
+      <span class="text-[10px] font-bold uppercase tracking-[.18em] text-emerald-700">Ringkasan pesanan</span><h2 id="cart-title" class="mt-1 pr-10 text-2xl font-extrabold">Keranjang kamu</h2><p class="mt-2 text-sm text-stone-500">Kamu masih bisa menambah, mengurangi, atau menghapus produk.</p>
+      <div id="cart-items" class="mt-3 divide-y divide-stone-100"></div>
+      <button id="add-more" type="button" class="mt-3 w-full rounded-xl border border-dashed border-emerald-600 px-4 py-3 text-sm font-bold text-emerald-800 hover:bg-emerald-50">＋ Tambah menu lainnya</button>
+      <div class="mt-5 flex items-center justify-between border-t border-stone-200 pt-4"><span class="font-semibold text-stone-600">Total harga menu</span><b id="cart-total" class="text-2xl font-extrabold">Rp0</b></div>
+      <p class="mt-2 text-xs leading-5 text-stone-500">Ongkos kirim, jika ada, akan dikonfirmasi oleh admin.</p>
+      <button id="confirm-order" type="button" class="mt-5 w-full rounded-full bg-emerald-700 px-5 py-4 font-extrabold text-white hover:bg-emerald-800">Konfirmasi pesanan <span class="ml-1">→</span></button>
+    </section>
+  </div>
+
+  <div id="checkout-overlay" data-overlay hidden class="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 backdrop-blur-[2px] sm:items-center sm:p-4">
+    <section role="dialog" aria-modal="true" aria-labelledby="checkout-title" class="modal-scroll relative w-full max-w-xl rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl sm:p-7">
+      <button type="button" data-close="checkout-overlay" aria-label="Tutup" class="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-stone-100 text-2xl text-stone-600">×</button>
+      <span class="text-[10px] font-bold uppercase tracking-[.18em] text-emerald-700">Langkah terakhir</span><h2 id="checkout-title" class="mt-1 pr-10 text-2xl font-extrabold">Detail pesanan</h2><p class="mt-2 text-sm text-stone-500">Isi data berikut sebelum melanjutkan ke WhatsApp admin.</p>
+      <div id="checkout-mini-summary" class="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-950"></div>
+      <form id="checkout-form" class="mt-5 space-y-4">
+        <div><label for="customer-name" class="mb-1.5 block text-sm font-bold">Atas nama <span class="text-red-600">*</span></label><input id="customer-name" name="customerName" autocomplete="name" maxlength="80" required placeholder="Nama pemesan" class="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"></div>
+        <fieldset><legend class="mb-2 text-sm font-bold">Pilihan pengantaran <span class="text-red-600">*</span></legend><div class="grid grid-cols-2 gap-3"><label class="cursor-pointer"><input class="peer sr-only" type="radio" name="delivery" value="Ambil sendiri" checked><span class="block rounded-xl border border-stone-200 p-3 text-center text-sm peer-checked:border-emerald-700 peer-checked:bg-emerald-50">🏠 <b>Ambil sendiri</b></span></label><label class="cursor-pointer"><input class="peer sr-only" type="radio" name="delivery" value="Diantar (Gojek/kurir)"><span class="block rounded-xl border border-stone-200 p-3 text-center text-sm peer-checked:border-emerald-700 peer-checked:bg-emerald-50">🛵 <b>Diantar</b></span></label></div></fieldset>
+        <div><label for="order-time" class="mb-1.5 block text-sm font-bold">Jam pengambilan / pengantaran <span class="text-red-600">*</span></label><input id="order-time" name="orderTime" type="time" required class="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"><p class="mt-1 text-xs text-stone-500">Waktu akan dikonfirmasi kembali oleh admin.</p></div>
+        <div id="address-field" hidden><label for="customer-address" class="mb-1.5 block text-sm font-bold">Alamat lengkap / sharelok <span class="text-red-600">*</span></label><textarea id="customer-address" name="address" rows="3" placeholder="Alamat, patokan, atau tautan Google Maps" class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"></textarea></div>
+        <div><label for="payment-method" class="mb-1.5 block text-sm font-bold">COD / TF <span class="text-red-600">*</span></label><select id="payment-method" name="payment" class="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"><option value="COD">COD / bayar saat menerima</option><option value="Transfer (TF)">Transfer (TF)</option></select></div>
+        <div><label for="order-notes" class="mb-1.5 block text-sm font-bold">Catatan tambahan (opsional)</label><textarea id="order-notes" name="notes" rows="2" maxlength="500" placeholder="Catatan untuk admin" class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"></textarea></div>
+        <div class="flex items-center justify-between rounded-2xl bg-stone-50 p-4"><span class="font-semibold text-stone-600">Total menu</span><b id="final-total" class="text-xl font-extrabold">Rp0</b></div>
+        <p id="checkout-error" hidden class="rounded-xl bg-red-50 p-3 text-sm text-red-700"></p>
+        <button type="submit" class="w-full rounded-full bg-emerald-700 px-5 py-4 font-extrabold text-white hover:bg-emerald-800">Kirim pesanan ke WhatsApp ↗</button>
+        <p class="text-center text-xs leading-5 text-stone-500">WhatsApp terbuka dengan format pesanan yang sudah terisi. Tekan tombol kirim di WhatsApp untuk mengirim ke admin.</p>
+      </form>
+    </section>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" hidden class="fixed bottom-24 left-1/2 z-[70] -translate-x-1/2 rounded-full bg-stone-900 px-5 py-3 text-sm font-semibold text-white shadow-xl"></div>
+  <footer class="border-t border-stone-200 bg-white px-4 py-6 text-center text-sm text-stone-500"><b class="text-stone-700">🍕 Pizza Asrifriska</b><p class="mt-1 text-xs">Pesanan akan dikonfirmasi oleh admin melalui WhatsApp.</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>
