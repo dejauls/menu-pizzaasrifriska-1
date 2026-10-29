@@ -69,15 +69,15 @@ function renderProducts(filter = 'all') {
   const shown = products.filter(product => filter === 'all' || product.category === filter);
   $('product-count').textContent = `${shown.reduce((sum, product) => sum + product.variants.length, 0)} menu`;
   $('product-list').innerHTML = shown.map(product => `
-    <section class="rounded-3xl border border-stone-200 bg-white px-4 pb-2 pt-5 sm:px-6">
-      <h3 class="border-b border-stone-200 pb-3 text-center text-xl font-extrabold uppercase tracking-[.2em] ">${escapeHtml(product.name)}</h3>
+    <section class="rounded-3xl  bg-white px-4 pb-2 pt-5 sm:px-6">
+      <h3 class="border-b border-stone-300 pb-3 text-center text-xl font-extrabold uppercase tracking-[.2em] ">${escapeHtml(product.name)}</h3>
       <div class="divide-y divide-stone-100">
         ${product.variants.map(item => `
         <article class="relative flex items-center gap-4 py-4">
-          <img src="${variantImage(product, item)}" alt="${escapeHtml(product.name + ' ' + item.name)}" loading="lazy" class="h-20 w-20 shrink-0 rounded-2xl bg-stone-100 object-cover" onerror="this.onerror=null;this.src='${product.image}'">
+          <img src="${variantImage(product, item)}" alt="${escapeHtml(product.name + ' ' + item.name)}" loading="lazy" class="h-24 w-24 shrink-0 rounded-2xl bg-stone-100 object-cover" onerror="this.onerror=null;this.src='${product.image}'">
           <div class="min-w-0 flex-1 pr-14">
-            <h4 class="text-lg text-stone-800">${escapeHtml(product.name)} ${escapeHtml(item.name)}</h4>
-            <p class="text-sm text-stone-500">${TOPPINGS.length} pilihan topping</p>
+            <h4 class="text-stone-800">${escapeHtml(product.name)} ${escapeHtml(item.name)}</h4>
+            <p class="text-xs text-stone-400">${TOPPINGS.length} pilihan topping</p>
             <p class="mt-2 text-lg font-bold text-stone-900">${rupiah(item.prices[0])}</p>
           </div>
           <button type="button" data-add="${product.id}:${item.id}" aria-label="Pilih ${escapeHtml(product.name + ' ' + item.name)}" class="absolute bottom-4 right-0 grid h-10 w-10 place-items-center rounded-full bg-emerald-700 text-2xl text-white shadow transition hover:bg-emerald-800">${PLUS_ICON}</button>
